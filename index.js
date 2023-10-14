@@ -1,10 +1,11 @@
 var express = require('express');
 var bodyParser = require('body-parser');
-// morgan
+const morgan = require('morgan');
 var app = express();
 
-// app.use morgan
-// require doten
+app.use(morgan ('tiny'));
+
+
 
 
 app.use(bodyParser.json());
