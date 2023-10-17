@@ -14,6 +14,34 @@ router.get('/allmovies', (req, res) => {
         });
 });
 
+// ambil data dengan pagination (limit 10 movies)
+router.get('/pagination', (req, res) => {
+    const page = parseInt(req.query.page) || 1;
+    const perPage = parseInt(req.query.perPage) || 10;
+
+    const offset = (page - 1) * perPage;
+
+    pool.query(
+        'SELECT * FROM movies OFFSET $1 LIMIT $2', [offset, perPage], (error, results) => {
+            if (error) {
+                throw error;
+            }
+            res.json(results.rows);
+        });
+});
+
+// ambil data dengan pagination (limit 10 movies)
+router.get('/paginate', (req, res) => {
+ 
+    pool.query(
+        `SELECT * FROM movies ${ req.query.limit ? 'LIMIT ' + req.query.limit : '' } `, (error, results) => {
+            if (error) {
+              throw error;
+            }
+            res.json(results.rows);
+          });
+});
+
 // menambah data baru
 router.post('/newmovie', (req, res) => {
     const { title, genres, year } = req.body;
