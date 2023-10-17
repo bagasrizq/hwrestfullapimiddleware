@@ -1,6 +1,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 // morgan
+var jwt = require('jsonwebtoken');
 var app = express();
 
 // app.use morgan
@@ -15,6 +16,22 @@ var users = require('./routes/users.routes.js');
 
 app.use('/movies', movies);
 app.use('/users', users);
+
+
+app.get('/', (req, res) => {
+    const token = jwt.sign(
+      {
+        userID: 23,
+        role: 'admin',
+      },
+      'koderahasia',
+      { expiresIn: '1h' }
+    );
+    res.json({
+      token: token,
+    });
+  });
+  
 
 app.listen(3000, () => {
     console.log('server berjalan di port 3000');

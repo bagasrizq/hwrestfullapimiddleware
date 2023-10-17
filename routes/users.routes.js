@@ -4,6 +4,16 @@ var router = express.Router();
 
 var pool = require('../query.js');
 
+router.get('/allusers', (req, res) => {
+  pool.query(
+      'SELECT * FROM users', (error, results) => {
+          if (error) {
+              throw error;
+          }
+          res.json(results.rows);
+      });
+});
+
 router.post('/login', (req, res) => {
     pool.query(
       `SELECT * FROM users WHERE email = $1 AND password = $2`,
@@ -21,4 +31,7 @@ router.post('/login', (req, res) => {
     );
   });
   
+
+
+
   module.exports = router;
