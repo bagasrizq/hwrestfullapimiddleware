@@ -17,7 +17,8 @@ router.get('/allmovies', (req, res) => {
 // menambah data baru
 router.post('/newmovie', (req, res) => {
     const { title, genres, year } = req.body;
-    pool.query('INSERT INTO movies (title, genres, year) VALUES ($1, $2, $3)', [title, genres, year], (error, results) => {
+    pool.query(
+        'INSERT INTO movies (title, genres, year) VALUES ($1, $2, $3)', [title, genres, year], (error, results) => {
         if (error) {
             throw error;
         }
@@ -32,17 +33,23 @@ router.put('/:id', (req, res) => {
     const id = req.params.id;
     const { title, genres, year } = req.body;
     pool.query(
-        'UPDATE movies SET title = $1, genres = $2, year = $3 WHERE id = $4', [title, genres, year], (error, results) => {
+        'UPDATE movies SET title = $1, genres = $2, year = $3 WHERE id = $4', [title, genres, year, id], (error, results) => {
             if (error) {
                 throw error
             }
-            res.json({ message: 'data succesfully edit'});
+            res.json({ message: 'data succesfully edited'});
         });
 });
 
-router.delete('/', function (req, res) {
-
-
+router.delete('/:id', (req, res) => {
+    const id = req.params.id;
+    pool.query(
+        'DELETE FROM movies WHERE id = $1' , [id], (error, results) => {
+            if (error) {
+                throw error;
+            }
+            res.json({ message: 'data succesfully deleted' });
+        });
 });
 
 module.exports = router;
